@@ -139,6 +139,7 @@ and limitations under the License
         },
 
         pauseRecording: function (successCallback, errorCallback, params) {
+            var me = module.exports;
             /*var ev = document.createEvent('Events');
             ev.initEvent('intel.xdk.audio.record.stop', true, true);
             ev.success = false;
@@ -152,6 +153,7 @@ and limitations under the License
         },
 
         resumeRecording: function (successCallback, errorCallback, params) {
+            var me = module.exports;
             /*var ev = document.createEvent('Events');
             ev.initEvent('intel.xdk.audio.record.stop', true, true);
             ev.success = false;
@@ -304,6 +306,7 @@ and limitations under the License
         },
 
         addSound: function() {
+            var me = module.exports;
             // Verify that we are currently not snapped, or that we can unsnap to open the picker
             var currentState = Windows.UI.ViewManagement.ApplicationView.value;
             if (currentState === Windows.UI.ViewManagement.ApplicationViewState.snapped && !Windows.UI.ViewManagement.ApplicationView.tryUnsnap()) {
@@ -509,6 +512,7 @@ and limitations under the License
         },
 
         audioBusy: function () {
+            var me = module.exports;
             /*var ev = document.createEvent('Events');
             ev.initEvent('appMobi.audio.record.busy', true, true);
             ev.success = false;
