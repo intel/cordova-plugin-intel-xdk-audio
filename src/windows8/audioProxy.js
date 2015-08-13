@@ -89,11 +89,16 @@ and limitations under the License
 
             me.mediaCapture.initializeAsync(me.captureInitSettings).then(function (result, b, c) {
                 if (me.mediaCapture.audioDeviceController.muted) {
-                    var ev = document.createEvent('Events');
+                    /*var ev = document.createEvent('Events');
                     ev.initEvent('intel.xdk.audio.record.busy', true, true);
                     ev.error = 'Device is muted.';
                     ev.success = false;
-                    document.dispatchEvent(ev);
+                    document.dispatchEvent(ev);*/
+                    me.createAndDispatchEvent("intel.xdk.audio.record.busy",
+                        {
+                            success: false,
+                            error: "Device is muted"
+                        });
                     return;
                 }
 
@@ -112,11 +117,16 @@ and limitations under the License
                                     me.mediaCapture.startRecordToStorageFileAsync(profile, file).done(
                                         function () {
                                             me.busy = true;
-                                            var ev = document.createEvent('Events');
+                                            /*var ev = document.createEvent('Events');
                                             ev.initEvent('intel.xdk.audio.record.start', true, true);
                                             ev.name = file.name;
                                             ev.success = true;
-                                            document.dispatchEvent(ev);
+                                            document.dispatchEvent(ev);*/
+                                            me.createAndDispatchEvent("intel.xdk.audio.record.start",
+                                                {
+                                                    success: false,
+                                                    name: file.name
+                                                });
                                         }
                                     );
                                 });
@@ -129,19 +139,29 @@ and limitations under the License
         },
 
         pauseRecording: function (successCallback, errorCallback, params) {
-            var ev = document.createEvent('Events');
+            /*var ev = document.createEvent('Events');
             ev.initEvent('intel.xdk.audio.record.stop', true, true);
             ev.success = false;
             ev.error = 'Pause is not supported.';
-            document.dispatchEvent(ev);
+            document.dispatchEvent(ev);*/
+            me.createAndDispatchEvent("intel.xdk.audio.record.stop",
+                {
+                    success: false,
+                    error: "Pause is not supported"
+                });
         },
 
         resumeRecording: function (successCallback, errorCallback, params) {
-            var ev = document.createEvent('Events');
+            /*var ev = document.createEvent('Events');
             ev.initEvent('intel.xdk.audio.record.stop', true, true);
             ev.success = false;
             ev.error = 'Resume is not supported.';
-            document.dispatchEvent(ev);
+            document.dispatchEvent(ev);*/
+            me.createAndDispatchEvent("intel.xdk.audio.record.stop",
+                {
+                    success: false,
+                    error: "Resume is not supported"
+                });
         },
 
         stopRecording: function (successCallback, errorCallback, params) {
@@ -154,11 +174,17 @@ and limitations under the License
                     function (result) {
                         me.busy = false;
 
-                        var ev = document.createEvent('Events');
+                        /*var ev = document.createEvent('Events');
                         ev.initEvent('intel.xdk.audio.internal.record.stop', true, true);
                         ev.success = true;
                         ev.name = me.recordingFileName;
-                        document.dispatchEvent(ev);
+                        document.dispatchEvent(ev);*/
+                        me.createAndDispatchEvent("intel.xdk.audio.internal.record.stop",
+                            {
+                                success: true,
+                                name: me.recordingFileName
+                            });
+
                         me.recordingFileName = null;
                     }, 
                     function (err) {
@@ -166,16 +192,25 @@ and limitations under the License
                     }
                 );
 
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.record.stop', true, true);
                 ev.success = true;
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.record.stop",
+                    {
+                        success: true
+                    });
             } else {
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.record.stop', true, true);
                 ev.success = false;
                 ev.error = 'No audio is recurding.';
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.record.stop",
+                    {
+                        success: false,
+                        error: "No audio is recurding"
+                    });
             }
 
             me.busy = false;
@@ -202,15 +237,25 @@ and limitations under the License
                                     if (file.name == name) {
                                         file.deleteAsync();
 
-                                        var ev = document.createEvent('Events');
+                                        /*var ev = document.createEvent('Events');
                                         ev.initEvent('intel.xdk.audio.internal.record.removed', true, true);
                                         ev.name = name;
-                                        ev.success = true; document.dispatchEvent(ev);
+                                        ev.success = true; document.dispatchEvent(ev);*/
+                                        me.createAndDispatchEvent("intel.xdk.audio.internal.record.removed",
+                                            {
+                                                success: true,
+                                                name: name
+                                            });
 
-                                        ev = document.createEvent('Events');
+                                        /*ev = document.createEvent('Events');
                                         ev.initEvent('intel.xdk.audio.record.removed', true, true);
                                         ev.name = name;
-                                        ev.success = true; document.dispatchEvent(ev);
+                                        ev.success = true; document.dispatchEvent(ev);*/
+                                        me.createAndDispatchEvent("intel.xdk.audio.record.removed",
+                                            {
+                                                success: true,
+                                                name: name
+                                            });
                                     }
                                 });
                             }
@@ -219,9 +264,10 @@ and limitations under the License
                 );
 
             } catch (e) {
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.record.notRemoved', true, true);
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.record.notRemoved");
             }
 
             me.busy = false;
@@ -241,13 +287,15 @@ and limitations under the License
                                 file.deleteAsync();
                             });
 
-                            var ev = document.createEvent('Events');
+                            /*var ev = document.createEvent('Events');
                             ev.initEvent('intel.xdk.audio.internal.record.clear', true, true);
-                            document.dispatchEvent(ev);
+                            document.dispatchEvent(ev);*/
+                            me.createAndDispatchEvent("intel.xdk.audio.internal.record.clear");
 
-                            ev = document.createEvent('Events');
+                            /*ev = document.createEvent('Events');
                             ev.initEvent('intel.xdk.audio.record.clear', true, true);
-                            document.dispatchEvent(ev);
+                            document.dispatchEvent(ev);*/
+                            me.createAndDispatchEvent("intel.xdk.audio.record.clear");
                         }
                     );
                 }
@@ -259,11 +307,16 @@ and limitations under the License
             // Verify that we are currently not snapped, or that we can unsnap to open the picker
             var currentState = Windows.UI.ViewManagement.ApplicationView.value;
             if (currentState === Windows.UI.ViewManagement.ApplicationViewState.snapped && !Windows.UI.ViewManagement.ApplicationView.tryUnsnap()) {
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.record.start', true, true);
                 ev.name = file.name;
                 ev.success = true;
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.record.start",
+                    {
+                        success: true,
+                        name: file.name
+                    });
                 return;
             }
 
@@ -288,30 +341,46 @@ and limitations under the License
                             file.copyAsync(dataFolder, file.name, Windows.Storage.NameCollisionOption.replaceExisting).then(
                                 function (storageFile) {
                                     if (storageFile != null) {
-                                        var ev = document.createEvent('Events');
+                                        /*var ev = document.createEvent('Events');
                                         ev.initEvent('intel.xdk.audio.record.start', true, true);
                                         ev.success = true;
                                         ev.name = storageFile.name;
-                                        document.dispatchEvent(ev);
+                                        document.dispatchEvent(ev);*/
+                                        me.createAndDispatchEvent("intel.xdk.audio.record.start",
+                                            {
+                                                success: true,
+                                                name: storageFile.name
+                                            });
                                     }
                                 }, function () {
-                                    var ev = document.createEvent('Events');
+                                    /*var ev = document.createEvent('Events');
                                     ev.initEvent('intel.xdk.audio.record.start', true, true);
                                     ev.success = false;
                                     ev.message = 'File save failed.';
-                                    document.dispatchEvent(ev);
+                                    document.dispatchEvent(ev);*/
+                                    me.createAndDispatchEvent("intel.xdk.audio.record.start",
+                                        {
+                                            success: false,
+                                            message: "File save failed"
+                                        });
 
                                 }, function () {
 
                                 });
                         });
                 } else {
-                    var ev = document.createEvent('Events');
+                    /*var ev = document.createEvent('Events');
                     ev.initEvent('ntel.xdk.audio.record.start', true, true);
                     ev.success = false;
                     ev.message = 'The user canceled.';
                     ev.filename = "";
-                    document.dispatchEvent(ev);
+                    document.dispatchEvent(ev);*/
+                    me.createAndDispatchEvent("intel.xdk.audio.record.start",
+                        {
+                            success: false,
+                            message: "The user canceled",
+                            filename: ""
+                        });
 
                     openPicker = null;
                     me.busy = false;
@@ -358,17 +427,26 @@ and limitations under the License
                 me.currentAudio = null;
                 me.busy = false;
 
-               var ev = document.createEvent('Events');
+               /*var ev = document.createEvent('Events');
                ev.initEvent('intel.xdk.audio.play.stop', true, true);
                ev.success = true;
-               document.dispatchEvent(ev);
+               document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.play.stop",
+                    {
+                        success: true
+                    });
             }
             else {
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.play.stop', true, true);
                 ev.success = false;
                 ev.error='No audio is playing or paused.';
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.play.stop",
+                    {
+                        success: false,
+                        error: "No audio is playing or paused"
+                    });
             }
         },
 
@@ -378,17 +456,26 @@ and limitations under the License
             if (me.currentAudio != null) {
                 me.currentAudio.pause();
 
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.play.pause', true, true);
                 ev.success = true;
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.play.pause",
+                    {
+                        success: true
+                    });
             }
             else {
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.play.pause', true, true);
                 ev.success = false;
                 ev.error = 'No audio is playing or paused.';
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.play.pause",
+                    {
+                        success: false,
+                        error: "No audio is playing or paused"
+                    });
             }
         },
 
@@ -398,26 +485,51 @@ and limitations under the License
             if (me.currentAudio != null) {
                 me.currentAudio.play();
 
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.play.continue', true, true);
                 ev.success = true;
-                document.dispatchEvent(ev);
-            }
+                document.dispatchEvent(ev);*/
+                 me.createAndDispatchEvent("intel.xdk.audio.play.continue",
+                    {
+                        success: true
+                    });
+           }
             else {
-                var ev = document.createEvent('Events');
+                /*var ev = document.createEvent('Events');
                 ev.initEvent('intel.xdk.audio.play.continue', true, true);
                 ev.success = false;
                 ev.error='No audio is paused.';
-                document.dispatchEvent(ev);
+                document.dispatchEvent(ev);*/
+                me.createAndDispatchEvent("intel.xdk.audio.play.continue",
+                    {
+                        success: false,
+                        error: "No audio is paused"
+                    });
             }
         },
 
         audioBusy: function () {
-            var ev = document.createEvent('Events');
+            /*var ev = document.createEvent('Events');
             ev.initEvent('appMobi.audio.record.busy', true, true);
             ev.success = false;
             ev.error = 'Audio is busy.';
-            document.dispatchEvent(ev);
+            document.dispatchEvent(ev);*/
+            me.createAndDispatchEvent("intel.xdk.audio.record.busy",
+                {
+                    success: false,
+                    error: "Audio is busy"
+                });
+        },
+
+        createAndDispatchEvent: function (name, properties) {
+            var e = document.createEvent('Events');
+            e.initEvent(name, true, true);
+            if (typeof properties === 'object') {
+                for (key in properties) {
+                    e[key] = properties[key];
+                }
+            }
+            document.dispatchEvent(e);
         }
     };
 
